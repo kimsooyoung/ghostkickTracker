@@ -1,3 +1,5 @@
+const fs = require('fs');
+const csv = require('fast-csv');
 const puppeteer = require("puppeteer");
 const schedule  = require('node-schedule');
 const moment = require('moment');
