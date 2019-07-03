@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kimsooyoung/ghostkickTracker#readme",
   "dependencies": {
+    "csv-write-stream": "^2.0.0",
     "fast-csv": "^3.0.1",
     "moment": "^2.24.0",
     "node-schedule": "^1.3.2",

@@ -1,14 +1,39 @@
 const fs = require('fs');
-const csv = require('fast-csv');
 const puppeteer = require("puppeteer");
 const schedule  = require('node-schedule');
 const moment = require('moment');
 
-// 사용시 인위적인 딜레이를 주기위한 함수
-function delay( timeout ) {
-  return new Promise(( resolve ) => {
-    setTimeout( resolve, timeout );
-  });
+const csvWriter = require('csv-write-stream');
+const csvFilename = 'test.csv';
+
+let kickNow = null;
+let xingNow = null;
+let gogoNow = null;
+let timeNow = null;
+
+function writeCsv( time, kick, xing, gogo){
+	if (!fs.existsSync(csvFilename)) {
+		writer = csvWriter({sendHeaders: false});
+		writer.pipe(fs.createWriteStream(csvFilename));
+		writer.write({
+			header1: 'Moment',
+			header2: 'Kickgoing',
+			header3: 'XingXing',
+			header4: 'Gogossing'
+		});
+		writer.end();
+	}
+	if(time){
+		writer = csvWriter({sendHeaders: false});
+		writer.pipe(fs.createWriteStream(csvFilename, {flags: 'a'}));
+		writer.write({
+			header1: time,
+			header2: kick,
+			header3: xing,
+			header4: gogo
+		});
+		writer.end();
+	}
 }
 
 async function ghostKickTracker(){
@@ -26,19 +51,23 @@ async function ghostKickTracker(){
 		return data;
 	}
 	
-	const kickNow = await getHTML('Kickgoing');
-	const xingNow = await getHTML('Xingxing');
-	const gogoNow = await getHTML('Gogossing');
-	const timeNow = moment().format('YYYY-MM-DD-HH:mm:ss');
+	kickNow = await getHTML('Kickgoing');
+	xingNow = await getHTML('Xingxing');
+	gogoNow = await getHTML('Gogossing');
+	timeNow = moment().format('YYYY-MM-DD-HH:mm:ss');
 	
+	// console.log("Kickgoing : ", kickNow);
+	// console.log("Xingxing : ", xingNow);
+	// console.log("Gogossing : ", gogoNow);
+	// console.log(timeNow);
+	await writeCsv( timeNow, kickNow, xingNow, gogoNow );
+	browser.close();
+};
+
+const job = schedule.scheduleJob(`*/10 * * * *`, () => {
+	ghostKickTracker();
 	console.log("Kickgoing : ", kickNow);
 	console.log("Xingxing : ", xingNow);
 	console.log("Gogossing : ", gogoNow);
 	console.log(timeNow);
-
-	browser.close();
-};
-
-const job = schedule.scheduleJob(`*/5 * * * * *`, () => {
-    ghostKickTracker();
 });
