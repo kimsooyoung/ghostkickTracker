@@ -6,46 +6,6 @@ const fs = require('fs');
 
 let prevDate = null;
 
-// let kickNow = null;
-// let xingNow = null;
-// let gogoNow = null;
-// let timeNow = null;
-
-function isDateSame(date){
-    if(prev_time === date){
-        return true;
-    }else{
-        console.log('Another Date!!');
-		prev_time = date;
-		return false;
-    }
-}
-
-function writeCsv( time, kick, xing, gogo){
-	if (!fs.existsSync(csvFilename)) {
-		writer = csvWriter({sendHeaders: false});
-		writer.pipe(fs.createWriteStream(csvFilename));
-		writer.write({
-			header1: 'Moment',
-			header2: 'Kickgoing',
-			header3: 'XingXing',
-			header4: 'Gogossing'
-		});
-		writer.end();
-	}
-	if(time){
-		writer = csvWriter({sendHeaders: false});
-		writer.pipe(fs.createWriteStream(csvFilename, {flags: 'a'}));
-		writer.write({
-			header1: time,
-			header2: kick,
-			header3: xing,
-			header4: gogo
-		});
-		writer.end();
-	}
-}
-
 async function ghostKickTracker(){
     let fullTimeString = moment().format('YYYY-MM-DD-HH:mm:ss');
     let dateNow = fullTimeString.substring(0, 10);
@@ -72,9 +32,9 @@ async function ghostKickTracker(){
 	let gogoNow = await getHTML('Gogossing');
 
     let csvFilename = `${dateNow}.csv`;
+	writer = csvWriter({sendHeaders: false});
     
     if(prevDate === dateNow){ // Same Date
-        writer = csvWriter({sendHeaders: false});
         writer.pipe(fs.createWriteStream(csvFilename, {flags: 'a'}));
         writer.write({
             header1: timeNow,
@@ -84,7 +44,6 @@ async function ghostKickTracker(){
         });
         writer.end();
     }else{ // Another Date
-		writer = csvWriter({sendHeaders: false});
 		writer.pipe(fs.createWriteStream(csvFilename));
 		writer.write({
 			header1: 'Moment',
@@ -103,6 +62,6 @@ async function ghostKickTracker(){
     }
 };
 
-const job = schedule.scheduleJob(`*/10 * * * * *`, () => {
+const job = schedule.scheduleJob(`*/10 * * * *`, () => {
 	ghostKickTracker();
 });
