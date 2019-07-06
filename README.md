@@ -1,3 +1,3 @@
 # ghostkickTracker
 
-## Crawler for ghostkick.io
+## Crawler for <a herf="ghostkick.net">ghostkick.net</a>
