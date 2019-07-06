@@ -1,3 +1,3 @@
 # ghostkickTracker
 
-## Crawller for ghostkick.io
+## Crawler for ghostkick.io
