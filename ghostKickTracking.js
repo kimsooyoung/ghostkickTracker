@@ -9,8 +9,6 @@ async function ghostKickTracker(){
     let dateNow = fullTimeString.substring(0, 10);
     let timeNow = fullTimeString.substring(11, 16);
 
-    console.log(dateNow, timeNow);
-
 	const browser = await puppeteer.launch({
 		headless : true,	// 헤드리스모드의 사용여부를 묻는다.
 		devtools : true	// 개발자 모드의 사용여부를 묻는다.
@@ -61,33 +59,16 @@ async function ghostKickTracker(){
         })
         writer.end();
     }
-
-    // if(prevDate === dateNow){ // Same Date
-    //     writer.pipe(fs.createWriteStream(csvFilename, {flags: 'a'}));
-    //     writer.write({
-    //         header1: timeNow,
-    //         header2: kickNow,
-    //         header3: xingNow,
-    //         header4: gogoNow
-    //     });
-    //     writer.end();
-    // }else{ // Another Date
-	// 	writer.pipe(fs.createWriteStream(csvFilename));
-	// 	writer.write({
-	// 		header1: 'Moment',
-	// 		header2: 'Kickgoing',
-	// 		header3: 'XingXing',
-	// 		header4: 'Gogossing'
-    //     });
-    //     writer.write({
-    //         header1: timeNow,
-    //         header2: kickNow,
-    //         header3: xingNow,
-    //         header4: gogoNow
-    //     })
-    //     writer.end();
-    //     prevDate = dateNow;
-    // }
+    console.log(fullTimeString);
+    fullTimeString = null;
+    dateNow = null;
+    timeNow = null;
+    browser = null;
+    page = null;
+    kickNow = null;
+    xingNow = null;
+    gogoNow = null;
+    csvFilename = null;
 };
 
 const job = schedule.scheduleJob(`*/10 * * * * *`, () => {
