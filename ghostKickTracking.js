@@ -71,6 +71,7 @@ async function ghostKickTracker(){
     csvFilename = null;
 };
 
+// ghostKickTracker();
 const job = schedule.scheduleJob(`*/10 * * * *`, () => {
 	ghostKickTracker();
 });
